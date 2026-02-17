@@ -1,0 +1,21 @@
+name: daily-suno
+
+on:
+  schedule:
+    - cron: "0 1 * * *" # 매일 10:00 KST (UTC 01:00)
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests
+      - name: Run generator
+        env:
+          VERCEL_API_BASE: ${{ secrets.VERCEL_API_BASE }}
+          INTERNAL_API_KEY: ${{ secrets.INTERNAL_API_KEY }}
+        run: python main.py
